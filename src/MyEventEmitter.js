@@ -29,13 +29,10 @@ class MyEventEmitter {
       return;
     }
 
-    const copyEvents = [...this.#events[eName]];
+    const copy = [...this.#events[eName]];
 
-    this.#events[eName] = copyEvents.filter((e) => {
-      e.cb(...args);
-
-      return e.permanent;
-    });
+    this.#events[eName] = this.#events[eName].filter((e) => e.permanent);
+    copy.forEach((e) => e.cb(...args));
   }
   prependListener(eName, cb) {
     if (!this.#events.hasOwnProperty(eName)) {
