@@ -18,6 +18,10 @@ class MyEventEmitter {
     }
   }
   off(eName, cb) {
+    if (!this.#events.hasOwnProperty(eName)) {
+      return;
+    }
+
     this.#events[eName] = this.#events[eName].filter((e) => e.cb !== cb);
   }
   emit(eName, ...args) {
@@ -25,7 +29,9 @@ class MyEventEmitter {
       return;
     }
 
-    this.#events[eName] = this.#events[eName].filter((e) => {
+    const copyEvents = [...this.#events[eName]];
+
+    this.#events[eName] = copyEvents.filter((e) => {
       e.cb(...args);
 
       return e.permanent;
